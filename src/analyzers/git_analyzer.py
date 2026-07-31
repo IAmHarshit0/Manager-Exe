@@ -1,76 +1,209 @@
 import os
+from dataclasses import dataclass, asdict, field
+from typing import List
 from git import Repo
-from pathlib import Path
 
-repo_url = "https://github.com/IAmHarshit0/AnimeRecommendations"
-local_path = "/home/iamha/projects/manager-exe/clone"
 
-# 1. Robust Repository Management (Clones only if missing, else safely loads)
-if not os.path.exists(os.path.join(local_path, ".git")):
-    print(f"Cloning repository into {local_path}...")
-    repo = Repo.clone_from(repo_url, local_path)
-else:
-    repo = Repo(local_path)
+@dataclass
+class Commit:
+    """Unified representation of a single commit's metadata and change footprint."""
+    sha: str
+    short_sha: str
+    author: str
+    date: str
+    message: str
+    files_changed: List[str] = field(default_factory=list)
+    insertions: int = 0
+    deletions: int = 0
 
-# Ensure we are pointing to a valid branch reference
-assert not repo.bare, "Repository failed to load properly."
+    def to_dict(self) -> dict:
+        return asdict(self)
 
-# # 2. Inspect Latest Commit Tree
-tree = repo.head.commit.tree
-# print(f"Latest Tree object: {tree}\n")
 
-# # 3. Fetch History Safely (Fixed the list indexing bug from your original code)
-# prev_commits = list(repo.iter_commits(all=True, max_count=10))
-# if prev_commits:
-#     tree = prev_commits[0].tree  # Fixed: Accessing the tree of the newest commit
+class LocalGitAnalyzer:
 
-# files_and_dirs = [(entry, entry.name, entry.type) for entry in tree]
-# print("Files and Dirs in top commit:", files_and_dirs, "\n")
+    def __init__(self, repo_url: str, local_path: str):
+        """Initializes and handles local cloning or loading of a Git repository."""
+        self.repo_url = repo_url
+        self.local_path = local_path
+        self.repo = self._initialize_repo()
 
-# 4. Streamlined Recursive Tree Visualizer
-def print_files_from_git(root, level=0):
-    for entry in root:
-        indent = "    " * level
-        prefix = "└── " if level > 0 else ""
-        print(f"{indent}{prefix}{entry.name} [{entry.type}]")
-        if entry.type == "tree":
-            print_files_from_git(entry, level + 1)
+    def _initialize_repo(self) -> Repo:
+        """Robust Repository Management: Clones only if missing, else safely loads."""
+        if not os.path.exists(os.path.join(self.local_path, ".git")):
+            print(f"Cloning repository into {self.local_path}...")
+            repo = Repo.clone_from(self.repo_url, self.local_path)
+        else:
+            print(f"Loading existing repository from {self.local_path}...")
+            repo = Repo(self.local_path)
 
-print("--- Repository File Tree ---")
-print_files_from_git(tree)
-print()
+        assert not repo.bare, "Repository failed to load properly."
+        return repo
 
-# 5. Case-Insensitive Target File Tracking
-target_file = "README.md"  # Fixed case sensitivity to match repository naming
-commits_for_file_generator = repo.iter_commits(all=True, max_count=10, paths=target_file)
-commits_for_file = list(commits_for_file_generator)
-print(f"Commits touching {target_file}: {len(commits_for_file)}\n")
+    def get_file_tree(self) -> list:
+        """Traverses the latest commit tree recursively and returns structured entries."""
+        tree = self.repo.head.commit.tree
+        flat_tree = []
 
-# 6. Optimized Chronological Logs
-fifty_first_commits = list(repo.iter_commits("master", max_count=50))
-print("--- Last 50 Commits ---")
-for commit in fifty_first_commits:
-    # Clean string extraction prevents multiline commit messages from breaking output format
-    clean_message = commit.message.split('\n')[0][:50]
-    print(f"Commit: {commit.hexsha[:7]} | Author: {commit.author.name} | Msg: {clean_message}")
-print()
+        def _traverse(root, level=0):
+            for entry in root:
+                flat_tree.append(
+                    {"name": entry.name, "type": entry.type, "level": level}
+                )
+                if entry.type == "tree":
+                    _traverse(entry, level + 1)
 
-# 7. High-Speed Sequential Diff Analysis (Fixed the crash-heavy O(N²) nested loop)
-print("--- Sequential Diffs (Newest to Oldest) ---")
-for i in range(len(fifty_first_commits)):
-    current = fifty_first_commits[i]
-    
-    # Handle the initial/root commit safely (which has no parents)
-    parents = current.parents
-    if not parents:
-        # Diff against an empty tree string constants to see what files were born in commit 1
-        diffs = current.diff(None, create_patch=False) 
-    else:
-        # Compare current against its immediate direct ancestor
-        diffs = parents[0].diff(current)
-        
-    for diff in diffs:
-        # Safely extract path status even if a file was entirely deleted/renamed
-        status = diff.change_type
-        path = diff.b_path if status == 'A' else diff.a_path
-        print(f" [{status}] Commit {current.hexsha[:7]}: {path}")
+        _traverse(tree)
+        return flat_tree
+
+    def print_file_tree(self):
+        """Prints a streamlined visual representation of the repository tree."""
+        tree_entries = self.get_file_tree()
+        for entry in tree_entries:
+            indent = "    " * entry["level"]
+            prefix = "└── " if entry["level"] > 0 else ""
+            print(f"{indent}{prefix}{entry['name']} [{entry['type']}]")
+
+    def get_file_commit_count(self, target_file: str = "README.md") -> int:
+        """Finds commits touching a specific target file using case-insensitive validation."""
+        # Find matching filename case-sensitivities inside the current tree
+        tree = self.repo.head.commit.tree
+        actual_path = target_file
+
+        for entry in tree:
+            if entry.name.lower() == target_file.lower():
+                actual_path = entry.name
+                break
+
+        commits = list(
+            self.repo.iter_commits(all=True, max_count=10, paths=actual_path)
+        )
+        return len(commits)
+
+    def get_commits(self, branch_name: str = "master", limit: int = 50) -> List[Commit]:
+        """Builds a unified list of Commit objects: metadata + changed files + line stats."""
+        commits = list(self.repo.iter_commits(branch_name, max_count=limit))
+        result = []
+
+        for commit in commits:
+            parents = commit.parents
+
+            if not parents:
+                diffs = commit.diff(None, create_patch=False)
+            else:
+                diffs = parents[0].diff(commit)
+
+            files_changed = [
+                diff.b_path if diff.change_type == "A" else diff.a_path
+                for diff in diffs
+            ]
+
+            stats = commit.stats.total
+            clean_message = commit.message.split("\n")[0][:50]
+
+            result.append(
+                Commit(
+                    sha=commit.hexsha,
+                    short_sha=commit.hexsha[:7],
+                    author=commit.author.name,
+                    date=commit.committed_datetime.isoformat(),
+                    message=clean_message,
+                    files_changed=files_changed,
+                    insertions=stats.get("insertions", 0),
+                    deletions=stats.get("deletions", 0),
+                )
+            )
+        return result
+
+    def get_commit_date_range(self, branch_name: str = "master") -> dict:
+        """Walks the full branch history to determine the first and last commit timestamps."""
+        commits = list(self.repo.iter_commits(branch_name))
+
+        if not commits:
+            return {"first_commit_date": None, "last_commit_date": None, "total_commits": 0}
+
+        # iter_commits yields newest-first, so index 0 is the last commit and -1 is the first
+        last_commit = commits[0]
+        first_commit = commits[-1]
+
+        return {
+            "first_commit_date": first_commit.committed_datetime.isoformat(),
+            "last_commit_date": last_commit.committed_datetime.isoformat(),
+            "total_commits": len(commits),
+        }
+
+    def get_contributor_stats(self, branch_name: str = "master") -> dict:
+        """Aggregates unique contributors and per-author commit counts across full history."""
+        commits = list(self.repo.iter_commits(branch_name))
+        commits_per_author = {}
+
+        for commit in commits:
+            author_name = commit.author.name or "Unknown"
+            author_email = commit.author.email or "unknown"
+            key = f"{author_name} <{author_email}>"
+            commits_per_author[key] = commits_per_author.get(key, 0) + 1
+
+        # Sort contributors by commit count, most active first
+        sorted_authors = sorted(
+            commits_per_author.items(), key=lambda item: item[1], reverse=True
+        )
+
+        return {
+            "total_contributors": len(commits_per_author),
+            "contributors": [name for name, _ in sorted_authors],
+            "commits_per_author": dict(sorted_authors),
+        }
+
+    def analyze(self, branch_name: str = "master") -> dict:
+        """Compiles a comprehensive summary report of the local repository matrix."""
+        file_tree = self.get_file_tree()
+
+        # Count types
+        total_files = sum(1 for item in file_tree if item["type"] == "blob")
+        total_dirs = sum(1 for item in file_tree if item["type"] == "tree")
+
+        # Extensions tracking
+        extensions = {}
+        for item in file_tree:
+            if item["type"] == "blob":
+                _, ext = os.path.splitext(item["name"])
+                ext = ext.lower() if ext else "no_extension"
+                extensions[ext] = extensions.get(ext, 0) + 1
+
+        commits = self.get_commits(branch_name)
+        commit_dicts = [c.to_dict() for c in commits]
+        date_range = self.get_commit_date_range(branch_name)
+        contributor_stats = self.get_contributor_stats(branch_name)
+
+        total_files_modified = sum(len(c.files_changed) for c in commits)
+        total_insertions = sum(c.insertions for c in commits)
+        total_deletions = sum(c.deletions for c in commits)
+
+        return {
+            "repository_path": self.local_path,
+            "active_branch": branch_name,
+            "tree_summary": {
+                "total_files": total_files,
+                "total_directories": total_dirs,
+                "extension_distribution": extensions,
+            },
+            "history_summary": {
+                "analyzed_commits_count": len(commits),
+                "latest_commit": commit_dicts[0] if commit_dicts else None,
+                "first_commit_date": date_range["first_commit_date"],
+                "last_commit_date": date_range["last_commit_date"],
+                "total_commits": date_range["total_commits"],
+            },
+            "change_summary": {
+                "total_file_modifications": total_files_modified,
+                "total_insertions": total_insertions,
+                "total_deletions": total_deletions,
+                "total_lines_changed": total_insertions + total_deletions,
+                "recent_commits": commit_dicts[:10],  # Return up to the latest 10 Commit objects
+            },
+            "contributor_summary": {
+                "total_contributors": contributor_stats["total_contributors"],
+                "contributors": contributor_stats["contributors"],
+                "commits_per_author": contributor_stats["commits_per_author"],
+            },
+        }
