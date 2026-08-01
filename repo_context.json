@@ -1,0 +1,172 @@
+{
+    "repository": {
+        "name": "AnimeRecommendations",
+        "full_name": "IAmHarshit0/AnimeRecommendations",
+        "description": "Anime & Movie Recommender System A unified content-based recommendation system that suggests similar anime or movies based on user input. Built using two separate datasets (~12,000 anime & ~5,000 movies) with Streamlit frontend. Just choose the type (anime or movie), enter a title, and get intelligent recommendations in a tabular format.",
+        "source_remote_url": "https://github.comIAmHarshit0/AnimeRecommendations",
+        "generated_at": "2026-07-31T20:30:16.225427Z"
+    },
+    "git": {
+        "active_branch": "master",
+        "default_branch": "master",
+        "latest_commit_sha": "f4699824836f6ec2f1d6bb31771b4b877d38fa64",
+        "total_branches": 1,
+        "all_branches": [
+            "master"
+        ]
+    },
+    "history": {
+        "analyzed_commits_count": 7,
+        "total_commits": 7,
+        "first_commit_date": "2025-07-18T23:34:08+05:30",
+        "last_commit_date": "2025-07-18T23:55:15+05:30",
+        "latest_commit_details": {
+            "sha": "f4699824836f6ec2f1d6bb31771b4b877d38fa64",
+            "short_sha": "f469982",
+            "author": "IAmHarshit0",
+            "date": "2025-07-18T23:55:15+05:30",
+            "message": "Update Requirements.txt For Streamlit 3rd",
+            "files_changed": [
+                "requirements.txt"
+            ],
+            "insertions": 5,
+            "deletions": 4
+        }
+    },
+    "commits": {
+        "total_file_modifications": 8,
+        "recent_commits": [
+            {
+                "sha": "f4699824836f6ec2f1d6bb31771b4b877d38fa64",
+                "short_sha": "f469982",
+                "author": "IAmHarshit0",
+                "date": "2025-07-18T23:55:15+05:30",
+                "message": "Update Requirements.txt For Streamlit 3rd",
+                "files_changed": [
+                    "requirements.txt"
+                ],
+                "insertions": 5,
+                "deletions": 4
+            },
+            {
+                "sha": "6d52c48a38fde47c889b996b4610f5cb9b9fbc49",
+                "short_sha": "6d52c48",
+                "author": "IAmHarshit0",
+                "date": "2025-07-18T23:52:09+05:30",
+                "message": "Update Requirements.txt For Streamlit Again",
+                "files_changed": [
+                    "requirements.txt"
+                ],
+                "insertions": 3,
+                "deletions": 2
+            },
+            {
+                "sha": "1cc7bf6ed6861903ef6ba95814fefbcbe327792f",
+                "short_sha": "1cc7bf6",
+                "author": "IAmHarshit0",
+                "date": "2025-07-18T23:45:53+05:30",
+                "message": "Update Requirements.txt For Streamlit",
+                "files_changed": [
+                    "requirements.txt"
+                ],
+                "insertions": 2,
+                "deletions": 3
+            },
+            {
+                "sha": "b6dd8637719dbe0181910a6adf5698372db68087",
+                "short_sha": "b6dd863",
+                "author": "IAmHarshit0",
+                "date": "2025-07-18T23:43:12+05:30",
+                "message": "Merge branch 'master' of https://github.com/IAmHar",
+                "files_changed": [
+                    "README.md"
+                ],
+                "insertions": 80,
+                "deletions": 0
+            },
+            {
+                "sha": "34130c96f18110f15ad1bb166dd50ee1300cd19b",
+                "short_sha": "34130c9",
+                "author": "IAmHarshit0",
+                "date": "2025-07-18T23:42:59+05:30",
+                "message": "Update Requirements.txt",
+                "files_changed": [
+                    "requirements.txt"
+                ],
+                "insertions": 2,
+                "deletions": 2
+            },
+            {
+                "sha": "915d5412cddb56292ba24209189c143ddcdaf062",
+                "short_sha": "915d541",
+                "author": "Harshit",
+                "date": "2025-07-18T23:39:03+05:30",
+                "message": "Create README.md",
+                "files_changed": [
+                    "README.md"
+                ],
+                "insertions": 80,
+                "deletions": 0
+            },
+            {
+                "sha": "da61cfe3ee573cb9056b4ca025fa10a78d580b3d",
+                "short_sha": "da61cfe",
+                "author": "IAmHarshit0",
+                "date": "2025-07-18T23:34:08+05:30",
+                "message": "First Commit",
+                "files_changed": [
+                    "README.md",
+                    "requirements.txt"
+                ],
+                "insertions": 20067,
+                "deletions": 0
+            }
+        ]
+    },
+    "lines_changed": {
+        "total_insertions": 20239,
+        "total_deletions": 11,
+        "total_lines_changed": 20250
+    },
+    "contributors": {
+        "source": "github_api",
+        "total_contributors": 1,
+        "contributors": [
+            {
+                "login": "IAmHarshit0",
+                "contributions": 7
+            }
+        ]
+    },
+    "files": {
+        "total_files": 10,
+        "total_directories": 1,
+        "root_elements_count": 10,
+        "root_elements": [
+            ".gitignore",
+            "PRJ Movie Recommendation.ipynb",
+            "README.md",
+            "__pycache__",
+            "anime.csv",
+            "anime_rec.ipynb",
+            "app.py",
+            "movies.csv",
+            "requirements.txt",
+            "util.py"
+        ],
+        "file_extension_counts": {
+            "no_extension": 1,
+            ".ipynb": 2,
+            ".md": 1,
+            ".pyc": 1,
+            ".csv": 2,
+            ".py": 2,
+            ".txt": 1
+        }
+    },
+    "documentation": {
+        "has_readme": true,
+        "readme_filename": "README.md",
+        "character_count": 1648
+    }
+}
