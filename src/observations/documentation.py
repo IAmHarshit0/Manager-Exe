@@ -23,6 +23,3 @@ elif doc_to_code > 0.1 and doc_density > 50:
     documentation_quality = "Medium"
 else:
     documentation_quality = "Low"
-
-print(f"Readme Presence: {readme_presence}")
-print(f"Documentation Quality: {documentation_quality}")
