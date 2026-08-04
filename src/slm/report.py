@@ -1,11 +1,11 @@
 import os
 import json
-from collaboration import total_devs, authorship_score, bulk_ratio, bulk_rating
-from commits import semantic_count, violations, semantic_signal, atomicity_signal
-from delivery import max_streak, has_config, has_data, stability, reproducibility
-from dev_activity import lifespan, gap, velocity_signal, recency_signal
-from documentation import readme_presence, doc_to_code, doc_density, documentation_quality
-from tree import pollution, env_leak, root_score
+from observations.collaboration import total_devs, authorship_score, bulk_ratio, bulk_rating
+from observations.commits import semantic_count, violations, semantic_signal, atomicity_signal
+from observations.delivery import max_streak, has_config, has_data, stability, reproducibility
+from observations.dev_activity import lifespan, gap, velocity_signal, recency_signal
+from observations.documentation import readme_presence, doc_to_code, doc_density, documentation_quality
+from observations.tree import pollution, env_leak, root_score
 
 cwd = os.getcwd()
 parent = os.path.dirname(cwd)

@@ -10,6 +10,7 @@ requires-python = ">=3.12"
 dependencies = [
     "gitpython>=3.1.57",
     "ollama>=0.6.2",
+    "openai>=2.53.0",
     "pathlib>=1.0.1",
     "pygithub>=2.9.1",
     "python-dotenv>=1.2.2",

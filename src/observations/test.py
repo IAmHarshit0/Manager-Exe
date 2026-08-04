@@ -1,2 +1,0 @@
-from report import generate_observation_report
-print(generate_observation_report())
