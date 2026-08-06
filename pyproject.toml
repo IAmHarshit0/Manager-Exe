@@ -10,12 +10,13 @@ requires-python = ">=3.12"
 dependencies = [
     "gitpython>=3.1.57",
     "ollama>=0.6.2",
-    "openai>=2.53.0",
-    "pathlib>=1.0.1",
     "pygithub>=2.9.1",
     "python-dotenv>=1.2.2",
-    "streamlit>=1.60.0",
 ]
+
+[project.optional-dependencies]
+openai = ["openai>=2.53.0"]
+ui = ["streamlit>=1.60.0"]
 
 [project.scripts]
 manager-exe = "manager_exe:main"
@@ -23,3 +24,6 @@ manager-exe = "manager_exe:main"
 [build-system]
 requires = ["uv_build>=0.12.0,<0.13.0"]
 build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = ["manager_exe", "analyzers", "observations", "slm"]

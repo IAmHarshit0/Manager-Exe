@@ -1,132 +1,183 @@
 {
     "repository": {
-        "name": "AnimeRecommendations",
-        "full_name": "IAmHarshit0/AnimeRecommendations",
-        "description": "Anime & Movie Recommender System A unified content-based recommendation system that suggests similar anime or movies based on user input. Built using two separate datasets (~12,000 anime & ~5,000 movies) with Streamlit frontend. Just choose the type (anime or movie), enter a title, and get intelligent recommendations in a tabular format.",
-        "source_remote_url": "https://github.comIAmHarshit0/AnimeRecommendations",
-        "generated_at": "2026-07-31T20:30:16.225427Z"
+        "name": "YoutubeSentimentAnalysis",
+        "full_name": "IAmHarshit0/YoutubeSentimentAnalysis",
+        "description": "Chrome Extension + Flask backend for YouTube comment sentiment analysis with full MLOps pipeline (MLflow, DVC, Docker, CI/CD).",
+        "source_remote_url": "https://github.com/IAmHarshit0/YoutubeSentimentAnalysis.git",
+        "generated_at": "2026-08-06T19:49:32.718651Z"
     },
     "git": {
         "active_branch": "master",
         "default_branch": "master",
-        "latest_commit_sha": "f4699824836f6ec2f1d6bb31771b4b877d38fa64",
+        "latest_commit_sha": "3b18e2203197d2ed8a0bcdc4bb1af5ed99703b3e",
         "total_branches": 1,
         "all_branches": [
             "master"
         ]
     },
     "history": {
-        "analyzed_commits_count": 7,
-        "total_commits": 7,
-        "first_commit_date": "2025-07-18T23:34:08+05:30",
-        "last_commit_date": "2025-07-18T23:55:15+05:30",
+        "analyzed_commits_count": 12,
+        "total_commits": 12,
+        "first_commit_date": "2025-08-23T02:35:20+05:30",
+        "last_commit_date": "2025-09-02T02:57:04+05:30",
         "latest_commit_details": {
-            "sha": "f4699824836f6ec2f1d6bb31771b4b877d38fa64",
-            "short_sha": "f469982",
-            "author": "IAmHarshit0",
-            "date": "2025-07-18T23:55:15+05:30",
-            "message": "Update Requirements.txt For Streamlit 3rd",
+            "sha": "3b18e2203197d2ed8a0bcdc4bb1af5ed99703b3e",
+            "short_sha": "3b18e22",
+            "author": "Harshit",
+            "date": "2025-09-02T02:57:04+05:30",
+            "message": "Update README.md",
             "files_changed": [
-                "requirements.txt"
+                "README.md"
             ],
-            "insertions": 5,
-            "deletions": 4
+            "insertions": 0,
+            "deletions": 10
         }
     },
     "commits": {
-        "total_file_modifications": 8,
+        "total_file_modifications": 62,
         "recent_commits": [
             {
-                "sha": "f4699824836f6ec2f1d6bb31771b4b877d38fa64",
-                "short_sha": "f469982",
-                "author": "IAmHarshit0",
-                "date": "2025-07-18T23:55:15+05:30",
-                "message": "Update Requirements.txt For Streamlit 3rd",
+                "sha": "3b18e2203197d2ed8a0bcdc4bb1af5ed99703b3e",
+                "short_sha": "3b18e22",
+                "author": "Harshit",
+                "date": "2025-09-02T02:57:04+05:30",
+                "message": "Update README.md",
                 "files_changed": [
-                    "requirements.txt"
+                    "README.md"
                 ],
-                "insertions": 5,
-                "deletions": 4
+                "insertions": 0,
+                "deletions": 10
             },
             {
-                "sha": "6d52c48a38fde47c889b996b4610f5cb9b9fbc49",
-                "short_sha": "6d52c48",
-                "author": "IAmHarshit0",
-                "date": "2025-07-18T23:52:09+05:30",
-                "message": "Update Requirements.txt For Streamlit Again",
+                "sha": "4f7704470114223dfb45e65ce7333aac39c655e2",
+                "short_sha": "4f77044",
+                "author": "Harshit",
+                "date": "2025-09-02T02:56:17+05:30",
+                "message": "Update README.md",
                 "files_changed": [
-                    "requirements.txt"
-                ],
-                "insertions": 3,
-                "deletions": 2
-            },
-            {
-                "sha": "1cc7bf6ed6861903ef6ba95814fefbcbe327792f",
-                "short_sha": "1cc7bf6",
-                "author": "IAmHarshit0",
-                "date": "2025-07-18T23:45:53+05:30",
-                "message": "Update Requirements.txt For Streamlit",
-                "files_changed": [
-                    "requirements.txt"
+                    "README.md"
                 ],
                 "insertions": 2,
+                "deletions": 13
+            },
+            {
+                "sha": "76e9aae8eff8894c5303363aa2787103e04ba54d",
+                "short_sha": "76e9aae",
+                "author": "IAmHarshit0",
+                "date": "2025-09-02T02:53:46+05:30",
+                "message": "Added Readme and Updated CICD",
+                "files_changed": [
+                    ".github/workflows/cicd.yaml",
+                    "README.md"
+                ],
+                "insertions": 128,
                 "deletions": 3
             },
             {
-                "sha": "b6dd8637719dbe0181910a6adf5698372db68087",
-                "short_sha": "b6dd863",
+                "sha": "861e3d9774ac3443f4c498a3d28244251a17d2ac",
+                "short_sha": "861e3d9",
                 "author": "IAmHarshit0",
-                "date": "2025-07-18T23:43:12+05:30",
-                "message": "Merge branch 'master' of https://github.com/IAmHar",
+                "date": "2025-09-02T02:18:35+05:30",
+                "message": "Updated CICD Yaml File",
                 "files_changed": [
-                    "README.md"
-                ],
-                "insertions": 80,
-                "deletions": 0
-            },
-            {
-                "sha": "34130c96f18110f15ad1bb166dd50ee1300cd19b",
-                "short_sha": "34130c9",
-                "author": "IAmHarshit0",
-                "date": "2025-07-18T23:42:59+05:30",
-                "message": "Update Requirements.txt",
-                "files_changed": [
-                    "requirements.txt"
+                    ".github/workflows/cicd.yaml"
                 ],
                 "insertions": 2,
-                "deletions": 2
+                "deletions": 1
             },
             {
-                "sha": "915d5412cddb56292ba24209189c143ddcdaf062",
-                "short_sha": "915d541",
-                "author": "Harshit",
-                "date": "2025-07-18T23:39:03+05:30",
-                "message": "Create README.md",
-                "files_changed": [
-                    "README.md"
-                ],
-                "insertions": 80,
-                "deletions": 0
-            },
-            {
-                "sha": "da61cfe3ee573cb9056b4ca025fa10a78d580b3d",
-                "short_sha": "da61cfe",
+                "sha": "b32be22c38a5f60bca6aad42b2467ec459d8e639",
+                "short_sha": "b32be22",
                 "author": "IAmHarshit0",
-                "date": "2025-07-18T23:34:08+05:30",
-                "message": "First Commit",
+                "date": "2025-09-02T02:11:06+05:30",
+                "message": "Updated Requirements.txt",
                 "files_changed": [
-                    "README.md",
                     "requirements.txt"
                 ],
-                "insertions": 20067,
+                "insertions": 0,
                 "deletions": 0
+            },
+            {
+                "sha": "00cd76caa0c883d02b7d79c73bb98cc6789b5504",
+                "short_sha": "00cd76c",
+                "author": "IAmHarshit0",
+                "date": "2025-09-02T02:06:43+05:30",
+                "message": "Added Requirements.txt",
+                "files_changed": [
+                    "requirements.txt"
+                ],
+                "insertions": 0,
+                "deletions": 0
+            },
+            {
+                "sha": "f5c7756a5639a06150acda020ffa867f1116c093",
+                "short_sha": "f5c7756",
+                "author": "IAmHarshit0",
+                "date": "2025-09-02T02:02:39+05:30",
+                "message": "Updated CI-CD Yaml File",
+                "files_changed": [
+                    ".github/workflows/cicd.yaml"
+                ],
+                "insertions": 11,
+                "deletions": 13
+            },
+            {
+                "sha": "4b85cd448bbeb640b5016adb8dc074aafd1666f7",
+                "short_sha": "4b85cd4",
+                "author": "IAmHarshit0",
+                "date": "2025-09-02T01:57:03+05:30",
+                "message": "CI-CD Added",
+                "files_changed": [
+                    ".github/workflows/cicd.yaml"
+                ],
+                "insertions": 3,
+                "deletions": 1
+            },
+            {
+                "sha": "43b4c0ca2a80a44238fb5d400343049716d2d5ab",
+                "short_sha": "43b4c0c",
+                "author": "IAmHarshit0",
+                "date": "2025-09-02T01:52:22+05:30",
+                "message": "CI-CD added",
+                "files_changed": [
+                    ".github/workflows/cicd.yaml"
+                ],
+                "insertions": 1,
+                "deletions": 1
+            },
+            {
+                "sha": "67857f7afbf514fdde32f12589ca1f22994a6d0a",
+                "short_sha": "67857f7",
+                "author": "IAmHarshit0",
+                "date": "2025-09-02T01:42:09+05:30",
+                "message": "Added Docker, Chrome-Plugin, Model, Flask",
+                "files_changed": [
+                    ".github/workflows/cicd.yaml",
+                    ".gitignore",
+                    "Dockerfile",
+                    "chrome_plugin/manifest.json",
+                    "chrome_plugin/popup.html",
+                    "chrome_plugin/popup.js",
+                    "dvc.lock",
+                    "dvc.yaml",
+                    "flask_api/main.py",
+                    "model_building_errors.log",
+                    "model_evaluation_errors.log",
+                    "model_registeration.py",
+                    "params.yaml",
+                    "src/model/model_building.py",
+                    "src/model/model_eval.py",
+                    "src/model/model_register.py"
+                ],
+                "insertions": 1217,
+                "deletions": 4
             }
         ]
     },
     "lines_changed": {
-        "total_insertions": 20239,
-        "total_deletions": 11,
-        "total_lines_changed": 20250
+        "total_insertions": 88363,
+        "total_deletions": 46,
+        "total_lines_changed": 88409
     },
     "contributors": {
         "source": "github_api",
@@ -134,39 +185,55 @@
         "contributors": [
             {
                 "login": "IAmHarshit0",
-                "contributions": 7
+                "contributions": 12
             }
         ]
     },
     "files": {
-        "total_files": 10,
-        "total_directories": 1,
-        "root_elements_count": 10,
+        "total_files": 33,
+        "total_directories": 10,
+        "root_elements_count": 20,
         "root_elements": [
+            ".dvc",
+            ".dvcignore",
+            ".github",
             ".gitignore",
-            "PRJ Movie Recommendation.ipynb",
+            "Dockerfile",
             "README.md",
-            "__pycache__",
-            "anime.csv",
-            "anime_rec.ipynb",
-            "app.py",
-            "movies.csv",
+            "chrome_plugin",
+            "confusion_matrix.png",
+            "data",
+            "dvc.lock",
+            "dvc.yaml",
+            "errors.log",
+            "flask_api",
+            "model_building_errors.log",
+            "model_evaluation_errors.log",
+            "model_registeration.py",
+            "notebooks",
+            "params.yaml",
             "requirements.txt",
-            "util.py"
+            "src"
         ],
         "file_extension_counts": {
-            "no_extension": 1,
-            ".ipynb": 2,
+            "no_extension": 6,
+            ".yaml": 3,
             ".md": 1,
-            ".pyc": 1,
+            ".json": 1,
+            ".html": 1,
+            ".js": 1,
+            ".png": 1,
             ".csv": 2,
-            ".py": 2,
+            ".lock": 1,
+            ".log": 3,
+            ".py": 7,
+            ".ipynb": 5,
             ".txt": 1
         }
     },
     "documentation": {
         "has_readme": true,
         "readme_filename": "README.md",
-        "character_count": 1648
+        "character_count": 2885
     }
 }

@@ -59,9 +59,10 @@ WORKSPACE_RULES = {
 pollution = 0
 env_leak = False
 for i in root:
-    if i.lower() in WORKSPACE_RULES["allowed_configs"] or i.lower() in WORKSPACE_RULES["allowed_docs"]:
+    name = i.lower()
+    if name in WORKSPACE_RULES["allowed_configs"] or name in WORKSPACE_RULES["allowed_docs"]:
         continue
-    elif i in WORKSPACE_RULES["environment_leaks"]:
+    elif name in WORKSPACE_RULES["environment_leaks"]:
         env_leak = True
     else:
         pollution += 1

@@ -5,7 +5,7 @@ from ollama import chat
 # Call the local model using the correct 'user' role and string content
 prompt = gen_prompt()
 response = chat(
-    model="llama3.2:latest", 
+    model="qwen3.5:4b", 
     messages=[
         {
             "role": "system",

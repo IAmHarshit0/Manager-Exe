@@ -1,6 +1,7 @@
 import os
+import shutil
 from dataclasses import dataclass, asdict, field
-from typing import List
+from typing import List, Optional
 from git import Repo
 
 
@@ -22,10 +23,26 @@ class Commit:
 
 class LocalGitAnalyzer:
 
-    def __init__(self, repo_url: str, local_path: str):
-        """Initializes and handles local cloning or loading of a Git repository."""
+    def __init__(
+        self,
+        repo_url: str,
+        local_path: str,
+        branch_name: Optional[str] = None,
+        pull: bool = False,
+    ):
+        """Initializes and handles local cloning or loading of a Git repository.
+
+        branch_name: if provided and `pull=True`, checked out before pulling
+        so the pull lands on the branch you're about to analyze rather than
+        whatever branch happened to be checked out already.
+        pull: if True and the repo already exists locally, fetch + pull
+        before analyzing. Off by default -- an already-cloned repo is
+        otherwise loaded as-is with no network calls.
+        """
         self.repo_url = repo_url
         self.local_path = local_path
+        self.branch_name = branch_name
+        self.pull = pull
         self.repo = self._initialize_repo()
 
     def _initialize_repo(self) -> Repo:
@@ -37,8 +54,76 @@ class LocalGitAnalyzer:
             print(f"Loading existing repository from {self.local_path}...")
             repo = Repo(self.local_path)
 
+            if self._remote_mismatch(repo):
+                repo = self._reclone_mismatched_repo(repo)
+            elif self.pull:
+                self._pull_latest(repo)
+
         assert not repo.bare, "Repository failed to load properly."
         return repo
+
+    @staticmethod
+    def _normalize_git_url(url: str) -> str:
+        """Loose normalization so http vs https, trailing slash, trailing
+        .git, and the ssh (git@host:owner/repo) vs https form all compare
+        equal."""
+        url = url.strip().rstrip("/")
+        if url.endswith(".git"):
+            url = url[:-4]
+        if url.startswith("git@"):
+            url = url.replace(":", "/", 1).replace("git@", "https://", 1)
+        return url.lower()
+
+    def _remote_mismatch(self, repo: Repo) -> bool:
+        """True if local_path's origin points somewhere other than
+        repo_url. If there's no origin remote to compare against, treat it
+        as not-mismatched -- there's nothing to contradict repo_url."""
+        try:
+            origin_url = next(repo.remotes.origin.urls)
+        except Exception:
+            return False
+        return self._normalize_git_url(origin_url) != self._normalize_git_url(self.repo_url)
+
+    def _reclone_mismatched_repo(self, repo: Repo) -> Repo:
+        """local_path holds a different repository than the one requested.
+        If the working tree is clean, wipe it and clone the correct repo
+        fresh. If there are uncommitted changes, stop instead of risking
+        deleting work that hasn't been committed anywhere."""
+        try:
+            origin_url = next(repo.remotes.origin.urls)
+        except Exception:
+            origin_url = "(unknown remote)"
+
+        if repo.is_dirty(untracked_files=True):
+            raise RuntimeError(
+                f"'{self.local_path}' contains a different repository ({origin_url}) "
+                f"than requested ({self.repo_url}), and it has uncommitted changes -- "
+                f"refusing to delete it automatically. Commit/stash your changes, point "
+                f"local_path elsewhere, or remove the folder manually and re-run."
+            )
+
+        print(
+            f"⚠️ '{self.local_path}' holds a different repository ({origin_url}) than "
+            f"requested ({self.repo_url}). Re-cloning..."
+        )
+        shutil.rmtree(self.local_path)
+        return Repo.clone_from(self.repo_url, self.local_path)
+
+    def _pull_latest(self, repo: Repo) -> None:
+        """Fetches and pulls the latest changes for an already-cloned repository.
+        Failures (no remote, diverged history, dirty working tree, etc.) are
+        reported but non-fatal -- analysis proceeds on whatever was already
+        on disk, same as if `pull` had been False."""
+        try:
+            origin = repo.remotes.origin
+            print(f"Fetching latest changes for {self.local_path}...")
+            origin.fetch()
+            if self.branch_name and self.branch_name in repo.heads:
+                repo.heads[self.branch_name].checkout()
+            origin.pull()
+            print(f"✅ Pulled latest changes ({repo.head.commit.hexsha[:7]}).")
+        except Exception as e:
+            print(f"⚠️ Pull skipped/failed: {e}")
 
     def get_file_tree(self) -> list:
         """Traverses the latest commit tree recursively and returns structured entries."""
@@ -179,6 +264,8 @@ class LocalGitAnalyzer:
         total_insertions = sum(c.insertions for c in commits)
         total_deletions = sum(c.deletions for c in commits)
 
+        root_elements = [item["name"] for item in file_tree if item["level"] == 0]
+
         return {
             "repository_path": self.local_path,
             "active_branch": branch_name,
@@ -186,6 +273,8 @@ class LocalGitAnalyzer:
                 "total_files": total_files,
                 "total_directories": total_dirs,
                 "extension_distribution": extensions,
+                "root_elements_count": len(root_elements),
+                "root_elements": root_elements,
             },
             "history_summary": {
                 "analyzed_commits_count": len(commits),

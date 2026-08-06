@@ -1,17 +1,28 @@
 import os
 from github import Github, Auth
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 class GithubAnalyzer:
     def __init__(self, token: str = None):
-        """Initializes the GitHub client using an explicit token or a .env file."""
+        """Initializes the GitHub client using an explicit token, an
+        environment variable, or a .env file found starting from the
+        current working directory. Using usecwd=True (rather than
+        find_dotenv()'s default, which searches from this file's own
+        location) matters once manager-exe is pip-installed: this file
+        then lives in site-packages, far from the user's actual project
+        and .env file."""
         if not token:
-            load_dotenv()
-            token = os.getenv("GithubToken")
-            
+            load_dotenv(find_dotenv(usecwd=True))
+            token = os.getenv("GITHUB_TOKEN") or os.getenv("GithubToken")
+
         if not token:
-            raise ValueError("GitHub Token not found. Provide it or set 'GithubToken' in your .env file.")
-            
+            raise ValueError(
+                "GitHub Token not found. Provide it via --github-token, "
+                "set GITHUB_TOKEN (or the legacy GithubToken) in your "
+                "environment, or add it to a .env file in your working "
+                "directory."
+            )
+
         self.auth = Auth.Token(token)
         self.g = Github(auth=self.auth)
         self.repo = None

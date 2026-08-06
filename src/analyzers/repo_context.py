@@ -10,6 +10,8 @@ def generate_repository_context(
     local_path: str,
     output_filename: str = "repo_context.json",
     branch_name: str = "master",
+    pull: bool = False,
+    github_token: str = None,
 ):
     """Combines remote API analytics with deep local history mapping into a structured JSON file."""
     print("🚀 Initializing Git Context Compilation Workflow...")
@@ -19,8 +21,10 @@ def generate_repository_context(
     try:
         # Extracts owner/repo format from full URL for PyGithub compatibility
         repo_identifier = repo_url.replace("https://github.com", "").strip("/")
+        if repo_identifier.endswith(".git"):
+            repo_identifier = repo_identifier[:-4]
 
-        remote_analyzer = GithubAnalyzer()
+        remote_analyzer = GithubAnalyzer(token=github_token)
         remote_analyzer.load_repository(repo_identifier)
         remote_report = remote_analyzer.analyze()
         print(f"✅ Remote data fetched for: {remote_report['full_name']}")
@@ -32,7 +36,7 @@ def generate_repository_context(
     print("\n[2/4] Parsing Local Repository Storage Engine...")
     try:
         local_analyzer = LocalGitAnalyzer(
-            repo_url=repo_url, local_path=local_path
+            repo_url=repo_url, local_path=local_path, branch_name=branch_name, pull=pull
         )
         local_report = local_analyzer.analyze(branch_name=branch_name)
         print(
@@ -110,8 +114,8 @@ def generate_repository_context(
         "files": {
             "total_files": tree_sum.get("total_files", 0),
             "total_directories": tree_sum.get("total_directories", 0),
-            "root_elements_count": file_sum.get("root_elements_count", 0),
-            "root_elements": file_sum.get("root_elements", []),
+            "root_elements_count": file_sum.get("root_elements_count") or tree_sum.get("root_elements_count", 0),
+            "root_elements": file_sum.get("root_elements") or tree_sum.get("root_elements", []),
             "file_extension_counts": tree_sum.get("extension_distribution", {})
         },
         "documentation": {
@@ -129,17 +133,3 @@ def generate_repository_context(
         print(f"🎉 Context compilation complete! Output file written.")
     except Exception as e:
         print(f"❌ Failed writing context data block matrix to disk: {e}")
-
-
-if __name__ == "__main__":
-    # Project setup variables
-    TARGET_REPO = "https://github.comIAmHarshit0/AnimeRecommendations"
-    LOCAL_WORKSPACE = "/home/iamha/projects/manager-exe/clone"
-    OUTPUT_FILE = "/home/iamha/projects/manager-exe/repo_context.json"
-
-    generate_repository_context(
-        repo_url=TARGET_REPO,
-        local_path=LOCAL_WORKSPACE,
-        output_filename=OUTPUT_FILE,
-        branch_name="master",  # Matches default target repository specification
-    )

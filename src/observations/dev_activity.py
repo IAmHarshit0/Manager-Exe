@@ -15,20 +15,23 @@ first_commit_date = repo_context["history"]["first_commit_date"]
 last_commit_date = repo_context["history"]["last_commit_date"]
 generated_date = repo_context["repository"]["generated_at"]
 
-first_commit = parser.parse(first_commit_date)
-last_commit = parser.parse(last_commit_date)
-generated_at = parser.parse(generated_date)
+# first/last_commit_date are None when local git analysis failed or the
+# repo has no commits -- parser.parse(None) would raise, so fall back to
+# "unknown" ratings instead of crashing the report.
+if first_commit_date and last_commit_date:
+    first_commit = parser.parse(first_commit_date)
+    last_commit = parser.parse(last_commit_date)
+    generated_at = parser.parse(generated_date)
 
-# Signal 1
-lifespan = (last_commit - first_commit).days
-if lifespan < 30:
-    velocity_signal = "Burst"
-else:
-    velocity_signal = "Incremental"
+    # Signal 1
+    lifespan = (last_commit - first_commit).days
+    velocity_signal = "Burst" if lifespan < 30 else "Incremental"
 
-# Signal 2
-gap = (generated_at - last_commit).days
-if gap < 30:
-    recency_signal = "Recent"
+    # Signal 2
+    gap = (generated_at - last_commit).days
+    recency_signal = "Recent" if gap < 30 else "Stale"
 else:
-    recency_signal = "Stale"
+    lifespan = None
+    velocity_signal = "Unknown"
+    gap = None
+    recency_signal = "Unknown"

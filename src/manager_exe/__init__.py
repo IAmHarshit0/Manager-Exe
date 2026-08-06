@@ -1,2 +1,3 @@
-def main() -> None:
-    print("Hello from manager-exe!")
+from .cli import main
+
+__all__ = ["main"]
