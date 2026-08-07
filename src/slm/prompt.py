@@ -1,4 +1,6 @@
-from slm.report import generate_observation_report
+import json
+
+from slm.report import generate_observation_report, repo_context
 
 def gen_prompt():
     report = generate_observation_report()
@@ -34,4 +36,40 @@ Generate a structured engineering review with the following sections:
 Engineering Report:
 
 {report}
+"""
+
+
+def gen_chat_prompt() -> str:
+    """System prompt for the interactive chat feature: gives the model both
+    the narrative report and the full raw repo_context.json, so a user can
+    ask about specifics -- an exact commit message, a contributor's email,
+    the full extension breakdown -- that the narrative report summarizes
+    away but never had to invent, since it's right there in the data."""
+    report = generate_observation_report()
+    context_json = json.dumps(repo_context, indent=2)
+    repo_name = repo_context.get("repository", {}).get("name") or "the repository"
+
+    return f"""
+You are an assistant helping a user explore an engineering analysis of the
+repository "{repo_name}".
+
+You have access to two things:
+1. A narrative observation report with derived signals and ratings.
+2. The raw structured data that report was generated from (repo_context.json).
+
+Guidelines:
+- Answer only using the report and raw data provided below. Never invent
+  details that aren't supported by them.
+- If something isn't covered by the data, say so plainly instead of guessing.
+- Be concise, and cite specific numbers, dates, filenames, or commit
+  messages from the data when it helps answer the question.
+- The user can ask about anything in the raw data, not just what's
+  summarized in the narrative report (individual commits, contributor
+  emails, branch names, exact file lists, etc.).
+
+=== OBSERVATION REPORT ===
+{report}
+
+=== RAW REPOSITORY DATA (repo_context.json) ===
+{context_json}
 """

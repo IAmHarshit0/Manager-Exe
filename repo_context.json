@@ -4,7 +4,7 @@
         "full_name": "IAmHarshit0/YoutubeSentimentAnalysis",
         "description": "Chrome Extension + Flask backend for YouTube comment sentiment analysis with full MLOps pipeline (MLflow, DVC, Docker, CI/CD).",
         "source_remote_url": "https://github.com/IAmHarshit0/YoutubeSentimentAnalysis.git",
-        "generated_at": "2026-08-06T19:49:32.718651Z"
+        "generated_at": "2026-08-07T21:32:30.484465Z"
     },
     "git": {
         "active_branch": "master",
