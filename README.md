@@ -275,7 +275,7 @@ Git analysis works fine without one.
 ## Installation
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/IAmHarshit0/Manager-Exe.git
 cd manager-exe
 uv sync
 ```
